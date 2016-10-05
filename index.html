@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://www.bastiancontrarioparma.it"> 
+  <title>Bastian Contrario</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+  <link href="css/ionic.app.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+
+
+      <script src="lib/ionic/js/ionic.bundle.js"></script>
+      <script src="js/angular-route.min.js"></script>
+       <script src="js/jquery-1.11.3.min.js"></script>
+       <script src="js/ng-cordova.min.js"></script>
+       <script src="lib/angular-animate/angular-animate.js"></script>
+       <script src="lib/ionic-ajax-interceptor/dist/ionic-ajax-interceptor.min.js"></script>
+       <script src="js/angular-filter.min.js"></script>
+      <script src="js/app.js"></script>
+
+    <!-- Needed for Cordova/PhoneGap (will be a 404 during development) -->
+
+    <script src="cordova.js"></script>
+  </head>
+  <body   ng-app="todo">
+  
+  
+ <!-- 
+ The nav bar that will be updated as we navigate between views.
+ -->
+
+ <!-- 
+ The views will be rendered in the <ion-nav-view> directive below
+ Templates are in the /templates folder (but you could also
+ have templates inline in this html file if you'd like).
+ -->
+ <ion-nav-bar class="bar-dark">
+  <ion-nav-back-button class="button-clear"></ion-nav-back-button>
+
+</ion-nav-bar>
+ <ion-nav-view  ></ion-nav-view>
+
+
+<script id="parent.html" type="text/ng-template">
+<ion-view view-title="Bastian Contrario">
+ <ion-nav-buttons side="right">
+ <button ng-controller="notificationsController" ng-click="openModal()" class="button button-right"><i class="icon ion-android-notifications"></i></button>
+         <button  class="button button-right" ng-click="openPopover($event)">
+        <i class="icon ion-android-more-vertical"></i>
+      </button>
+    </ion-nav-buttons>
+<div class="wrapper ">
+<ion-scroll overflow-scroll="false" direction="y" scrollbar-y="false" has-bouncing="true" class="padding next-event-description" ng-class="active">
+    <button class=" button button-clear button-small icon ion-chevron-down" ng-click="showDescription()"></button>
+
+    <h2 ng-bind-html="nextEvent.title"></h2>
+    <div ng-bind-html=" nextEvent.content"></div>
+    </ion-scroll>
+<div class="next-event" >
+
+ <div class="next-event-bg" ng-style="{'background-image': 'url({{nextEvent.attachments[0].images.medium_large.url}})'}"></div>
+ <div class="next-event-content bg-darker">
+  <div class="next-event-header">Next Event</div>
+ <div class="next-event-date" ng-bind-html="nextEvent.custom_fields.event_date[0];"></div>
+ <div class="next-event-title" ng-bind-html="nextEvent.title"><span></span></div>
+ <div class="buttons button-bar">
+ <span ng-class="rotate" ng-click="showDescription()" class="button button-small button-light button-clear">Info</span
+ ><span ng-class="" ng-click="openFlyerModal()" class="button button-small button-light button-clear" >Guarda il Flyer</span>
+  </div>
+
+ </div>
+
+ </div>
+ <div class="anchor">
+ 
+ </div>
+
+<div ui-sref="taplist" class="first-square square bg-darker"  >
+ <span class="custom-tab-icon  bg-dark">
+  <img class="custom-icon" src="css/pint-app-white.png"></img>
+ </span>
+ <div class="square-text">
+    <span class="square-title">What&#39;s on Tap</span>
+    <span class="square-subtitle">Birre alla spina</span>
+ </div>
+  <span  class="icon ion-chevron-right right-custom-icon"></span>
+</div>
+
+<div class=" second-square square bg-darker"  ui-sref="tv"  >
+  <span class="custom-tab-icon bg-dark">
+    <img class="custom-icon tv" src="css/tv-app-white.png"></img>
+  </span>
+  <div class="square-text">
+    <span class="square-title">What&#39;s on TV</span>
+    <span class="square-subtitle">Programmazione TV</span>
+  </div>
+  <span class="icon right-custom-icon ion-chevron-right"></span>
+</div>
+
+<div class="third-square square bg-darker" ui-sref="beershop"  >
+  <span class="custom-tab-icon  bg-dark">
+    <img class="custom-icon" src="css/bottle-app-white.png"></img>
+  </span>
+  <div class="square-text">
+    <span class="square-title">Beershop List</span>
+    <span class="square-subtitle">Birre in bottiglia disponibili</span>
+  </div>
+  <span class="icon ion-chevron-right right-custom-icon"></span>
+</div>
+</div>
+
+</ion-view>
+</script>
+
+ <script id= "taplist.html" type = "text/ng-template">
+ <ion-view  title="Tap List">
+ <ion-content class="">
+ <div class="list transparent">
+   <ul>
+        <li ng-switch on="beer.color" class="card  dark capitalize item-text-wrap" ng-repeat="beer in beers">
+         
+
+         <h4 class="no-border item item-divider" >
+         
+         <span ng-bind-html="beer.name.toLowerCase()"></span>
+         </h4>
+         <div class="padding card-left-image">
+         <span class="taplist-pint-wrapper dark">
+         <img ng-switch-when="chiara" class="taplist-pint" src="css/pint-app-light.png"></img>
+         <img ng-switch-when="ambrata" class="taplist-pint" src="css/pint-app-medium.png"></img>
+         <img ng-switch-when="scura" class="taplist-pint" src="css/pint-app-dark.png"></img>
+         <img ng-switch-default class="taplist-pint" src="css/pint-app-light.png"></img>
+         </span>
+         <div class="custom-card-text">
+            <div><strong>Birrificio: </strong><span ng-bind-html="beer.brewery.toLowerCase()"></span></div><div><strong>Tipologia: </strong><span ng-bind-html="beer.type.toLowerCase()"></span></div><div><strong>Gradazione: </strong><span ng-bind-html="beer.alcohol"></span></div>
+            <div ng-if="beer.city!=null && beer.city!=''">
+              <strong>Provenienza: </strong><span ng-bind-html="beer.city.toLowerCase()"></span>
+         </div>
+         </div>
+         </div>
+         </li>
+     </ul>
+  
+  </div>
+ </ion-content>
+</ion-view>
+</script>
+ </script>
+ <script id= "tv.html" type = "text/ng-template">
+ <ion-view  title="Programmazione TV">
+ <ion-content class="">
+ <h2 class="padding white-text" ng-if="!TV.length>0">Nessuna programmazione presente al momento.</h2>
+ <div class="list transparent">
+   <ul>
+        <li class="card dark capitalize item-text-wrap" ng-if="day[1].length>0" ng-repeat="day in TV ">
+         <h4 class=" no-border item  item-divider"  ng-bind-html="day[0]"></h4>
+         
+          <div ng-switch on="event.sport" class="padding card-left-image " ng-repeat="event in day[1] | orderBy : '' : true">
+            <span ng-switch-when="calcio" class="sport-icon  img-calcio"></span>
+          <span ng-switch-when="basket" class="sport-icon  img-basket"></span>
+          <span ng-switch-when="rugby" class="sport-icon  img-rugby"></span>
+          <span ng-switch-when="moto" class="sport-icon  img-moto"></span>
+          <span ng-switch-when="combattimenti" class="sport-icon  img-fight"></span>   
+          
+          <div class="custom-card-text">
+
+          <div class="uppercase"><strong ng-bind-html="event.name"></strong></div>
+          <div>{{event.type}}</div>
+          <div><strong>Ore: </strong><span ng-bind-html="event.time"></span></div>
+          </div>
+
+
+         </div>
+       
+         </li>
+     </ul>
+     </div>
+ </ion-content>
+</ion-view>
+</script>
+ <script id= "beershop.html" type = "text/ng-template">
+ <ion-view  title="Beershop List">
+ <ion-content class="">
+   <div class="item item-divider">Lista dei birrifici</div>
+   <ul class="list transparent beershop" >
+      <li   class=" dark"  ng-repeat="(key,value) in beershop_list |orderBy: 'brewery'| groupBy: 'brewery'">
+        <div  class="item capitalize item-button-right dark " >
+          
+        <span ng-bind-html="key"></span>
+        
+         <button  class="button button-clear" ng-class="{'icon ion-chevron-up': expanded, 'icon ion-chevron-down': !expanded}" ng-click="expanded= !expanded" ></button>
+        </div>
+       <div collapse  class="collapse-outer-wrapper" >
+          <ul class="brewery-wrapper" >
+            <li class="brewery-content item dark dark-item-divider"  ng-repeat="beer in value" >
+              <span class="beershop-name" ng-bind-html="beer.name"></span><p class="beershop-description" ng-if="beer.description!='' && beer.description!=null">
+              <span >Tipologia: </span><span style="color:rgba(255,255,255,0.8)" ng-bind-html="beer.description"></span></p>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+     
+     
+ </ion-content>
+</ion-view>
+</script>
+<script id="notifiche.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar class="bar-dark">
+<button class="button " ng-click="closeModal()">
+<i class="icon ion-chevron-left"></i></button>
+      <h1 class="title">Imposta notifiche</h1>
+
+
+    </ion-header-bar>
+    <ion-content overflow-scroll="false" scrollbar-y="false">
+
+      <ul class="list">
+          <li class="item  item-divider item-text-wrap">Notificami quando ricevo un aggiornarmento riguardo:</li>
+  <li class="dark item item-toggle">
+     Prossimo Evento
+     <label class="toggle toggle-balanced">
+       <input type="checkbox" ng-model = "notifiche.evento" ng-true-value="'true'" ng-false-value="'false'">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+  <li class="dark item item-toggle">
+     Tap List
+     <label class="toggle toggle-balanced">
+       <input type="checkbox" ng-model = "notifiche.taplist" ng-true-value="'true'" ng-false-value="'false'">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+    <li class="dark item item-toggle">
+Programmazione TV     <label class="toggle toggle-balanced">
+       <input type="checkbox"  ng-model= "notifiche.tv" ng-true-value="'true'" ng-false-value="'false'">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+    <li class=" dark item item-toggle">
+Birre disponibili al beershop<label class="toggle toggle-balanced">
+       <input type="checkbox" ng-model = "notifiche.beershop" ng-true-value="'true'" ng-false-value="'false'">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+
+
+
+</ul>
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+<script id="contacts.html" type="text/ng-template">
+<ion-modal-view>
+    <ion-header-bar class="bar-dark">
+<button class="button " ng-click="closeModal()">
+<i class="icon ion-chevron-left"></i></button>      <h1 class="title">Contatti</h1>
+    </ion-header-bar>
+    <ion-content overflow-scroll="false" scrollbar-y="false">
+    <ul class="list">
+    <li class="item item-divider">Telefono
+    </li>
+    <li class="dark item item-button-right"><b>Pub:</b> 3478113440 <a  href="tel:+393478113440" class="button button-outline button-light">
+      <i class="icon ion-ios-telephone"></i></a>
+</li>
+
+    <li class="dark item item-button-right"><b>Beershop:</b> 3400047499<a href="tel:+393400047499" class="button button-outline button-light">
+      <i class="icon ion-ios-telephone"></i>
+    </a></li>
+
+    <li class="item item-divider">Email</li>
+    <li class=" dark item item-button-right">bastiancontrarioparma@gmail.com<a href="mailto:bastiancontrarioparma@gmail.com" class="button button-outline button-light">
+    <i class="icon ion-email"></i>
+    </a></li>
+    </ul>
+    </ion-content>
+    </ion-modal-view>
+</script>
+
+<script id="flyer.html" type="text/ng-template">
+ <ion-modal-view class="modal-full-screen-image" >
+    <a  style="font-size: 24px" class="button button-fixed-right ion-close-circled button-clear" ng-click="closeFlyerModal()"></a>
+ 
+    <ion-scroll overflow-scroll="false" zooming="true" class="zoom-pane" direction="xy" delegate-handle="zoom-pane" scrollbar-x="false" scrollbar-y="false" min-zoom="1" has-bouncing="true">
+    
+    <img ng-src="{{nextEvent.attachments[0].images.medium_large.url}}";
+
+</ion-scroll>
+
+ </ion-modal-view>
+</script>
+
+<script id="popover.html" type="text/ng-template">
+<ion-popover-view>
+<ul ng-click="closePopover()">
+
+ <li ng-controller="contactsController" ng-click="openModal()" class="item item-icon-right"><i class="icon ion-android-person"></i>Contatti<li>
+ <li ng-controller="facebookController" ng-click="toFacebook()" class="item item-icon-right"><i class="icon ion-social-facebook"></i>Pagina Facebook</li>
+ 
+</ul>
+</ion-popover-view>
+</script>
+
+ </body>
+ 
+</html>
